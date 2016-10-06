@@ -20,7 +20,7 @@ Download chapters by id
 ## Observations
 
 + All the chapters will be downloaded in the */export* folder.
-+ Unfortunately, the mangásPROJECT API doesn't provide an search by id, so now the downloaded chapters file name is *<release_id>.zip*
++ Unfortunately, the mangásPROJECT API doesn't provide an search by id, so now the downloaded chapters file name is *&lt;release_id&gt;.zip*
 
 ## License
 
