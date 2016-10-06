@@ -24,7 +24,8 @@ def search(query):
         resp = request('post', SEARCH_URL, json=data).json()
     except Exception as e:
         logger.critical(str(e))
-        exit(1)
+        logger.error("mangásPROJECT only works in Brazil, use a VPN.")
+        exit(0)
 
     for serie in resp["series"]:
         s = Series(serie["id_serie"])
@@ -60,7 +61,8 @@ def list_chapters(series, page=1):
         resp = request('post', url, json=data).json()
     except Exception as e:
         logger.critical(str(e))
-        exit(1)
+        logger.error("mangásPROJECT only works in Brazil, use a VPN.")
+        exit(0)
 
     for chapter in resp["chapters"]:
         c = Chapter(chapter["id_chapter"])
@@ -88,7 +90,8 @@ def list_pages(chapter):
         resp = request('post', PAGES_LIST_URL, json=data).json()
     except Exception as e:
         logger.critical(str(e))
-        exit(1)
+        logger.error("mangásPROJECT only works in Brazil, use a VPN.")
+        exit(0)
 
     chapter.pages = resp["images"]
 
