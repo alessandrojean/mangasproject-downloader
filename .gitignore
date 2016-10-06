@@ -1,0 +1,6 @@
+*.py[cod]
+.idea/
+build
+dist/
+*.egg-info
+.python-version
