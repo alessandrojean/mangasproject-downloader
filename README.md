@@ -1,4 +1,5 @@
 # mangásPROJECT Downloader
+[![Build Status](https://travis-ci.org/alessandrojean/mangasproject-downloader.svg?branch=master)](https://travis-ci.org/alessandrojean/mangasproject-downloader)
 Simple downloader of mangásPROJECT website.
 
 ## Instalation
