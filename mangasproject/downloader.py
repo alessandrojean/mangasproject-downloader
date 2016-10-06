@@ -1,7 +1,10 @@
 # coding: utf-8
 import os
 import zipfile
-from urlparse import urlparse
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 import requests
 
 from mangasproject.utils import Singleton
