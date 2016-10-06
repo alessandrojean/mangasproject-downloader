@@ -9,8 +9,9 @@ from mangasproject.downloader import Downloader
 
 
 def main():
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
+    if sys.stdout.encoding is None:
+        logger.info("Please set python env PYTHONIOENCODING=UTF-8, example: export PYTHONIOENCODING=UTF-8, when write to stdout.")
+        exit(0)
 
     banner()
     options = cmd_parser()
