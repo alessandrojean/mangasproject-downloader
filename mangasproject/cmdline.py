@@ -56,7 +56,7 @@ def print_series(series_list):
         return
     series_list = [[i.id, i.name] for i in series_list]
     headers = ["id", "name"]
-    logger.info("Search result\n{0}".format(tabulate(
+    logger.info(u"Search result\n{0}".format(tabulate(
         tabular_data=series_list, headers=headers, tablefmt="rst"
     )))
 
@@ -68,6 +68,6 @@ def print_chapters(chapters_list):
         [i.id_release, i.number, i.name if i.name else '{0} #{1}'.format(i.series_name, i.number), i.scanlator, i.date]
         for i in chapters_list]
     headers = ["id", "number", "name", "scanlator", "date"]
-    logger.info("List of chapters\n{0}".format(tabulate(
+    logger.info(u"List of chapters\n{0}".format(tabulate(
         tabular_data=chapters_list, headers=headers, tablefmt="rst"
     )))

@@ -1,9 +1,11 @@
+# coding: utf-8
 import requests
 import re
 
 from mangasproject.logger import logger
 from mangasproject.constants import SEARCH_URL, CHAPTERS_LIST_URL, PAGES_LIST_URL, USER_AGENT
 from mangasproject.series import Series, Category, Chapter
+from mangasproject.cmdline import print_chapters
 
 
 def request(method, url, **kwargs):
@@ -21,10 +23,14 @@ def search(query):
 
     data = {"search": query}
     try:
-        resp = request('post', SEARCH_URL, json=data).json()
-    except Exception as e:
+        resp = request('post', SEARCH_URL, json=data)
+        if resp.status_code == 400:
+            logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+            exit(0)
+        resp = resp.json()
+    except requests.ConnectionError as e:
         logger.critical(str(e))
-        logger.error("mangásPROJECT only works in Brazil, use a VPN.")
+        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
         exit(0)
 
     for serie in resp["series"]:
@@ -58,26 +64,32 @@ def list_chapters(series, page=1):
     data = {"id_serie": series.id}
     url = "{0}{1}".format(CHAPTERS_LIST_URL, page)
     try:
-        resp = request('post', url, json=data).json()
-    except Exception as e:
+        resp = request('post', url, json=data)
+        if resp.status_code == 400:
+            logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+            exit(0)
+        resp = resp.json()
+    except requests.ConnectionError as e:
         logger.critical(str(e))
-        logger.error("mangásPROJECT only works in Brazil, use a VPN.")
+        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
         exit(0)
 
     for chapter in resp["chapters"]:
-        c = Chapter(chapter["id_chapter"])
-        c.id_series = chapter["id_serie"]
-        c.series_name = chapter["name"]
-        c.name = chapter["chapter_name"]
-        c.number = chapter["number"]
-        c.date = chapter["date"]
-        c.scanlator = chapter["scanlator"]
-        c.partner_scans = chapter["partner_scans"]
-        c.view_count = chapter["view_count"]
-        c.link = chapter["link"]
+        m = re.search("([0-9]+)-(.*)$", chapter["link"])
 
-        m = re.search("([0-9]+)-(.*)$", c.link)
-        c.id_release = m.group(1)
+        c = Chapter(
+            id=chapter["id_chapter"],
+            id_series=chapter["id_serie"],
+            series_name=chapter["name"],
+            id_release=m.group(1),
+            name=chapter["chapter_name"],
+            number=chapter["number"],
+            date=chapter["date"],
+            scanlator=chapter["scanlator"],
+            partner_scans=chapter["partner_scans"],
+            view_count=chapter["view_count"],
+            link=chapter["link"]
+        )
 
         series.chapters.append(c)
 
@@ -87,17 +99,21 @@ def list_pages(chapter):
 
     data = {"id_release": chapter.id_release}
     try:
-        resp = request('post', PAGES_LIST_URL, json=data).json()
-    except Exception as e:
+        resp = request('post', PAGES_LIST_URL, json=data)
+        if resp.status_code == 400:
+            logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+            exit(0)
+        resp = resp.json()
+    except requests.ConnectionError as e:
         logger.critical(str(e))
-        logger.error("mangásPROJECT only works in Brazil, use a VPN.")
+        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
         exit(0)
 
     chapter.pages = resp["images"]
 
 
 if __name__ == "__main__":
-    gantz = search("Gantz")[0]
-    gantz.show()
-    list_chapters(gantz)
-    gantz.chapters[0].show()
+    series = search("One Piece")[0]
+    series.show()
+    list_chapters(series)
+    print_chapters(series.chapters)
