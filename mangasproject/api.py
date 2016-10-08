@@ -24,12 +24,14 @@ def search(query):
     data = {"search": query}
     try:
         resp = request('post', SEARCH_URL, json=data)
-        if resp.status_code != requests.codes.ok:
-            logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
-            exit(0)
-        resp = resp.json()
     except requests.ConnectionError as e:
         logger.critical(str(e))
+        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+        exit(0)
+
+    try:
+        resp = resp.json()
+    except Exception as e:
         logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
         exit(0)
 
@@ -65,12 +67,14 @@ def list_chapters(series, page=1):
     url = "{0}{1}".format(CHAPTERS_LIST_URL, page)
     try:
         resp = request('post', url, json=data)
-        if resp.status_code != requests.codes.ok:
-            logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
-            exit(0)
-        resp = resp.json()
     except requests.ConnectionError as e:
         logger.critical(str(e))
+        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+        exit(0)
+
+    try:
+        resp = resp.json()
+    except Exception as e:
         logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
         exit(0)
 
@@ -100,12 +104,14 @@ def list_pages(chapter):
     data = {"id_release": chapter.id_release}
     try:
         resp = request('post', PAGES_LIST_URL, json=data)
-        if resp.status_code != requests.codes.ok:
-            logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
-            exit(0)
-        resp = resp.json()
     except requests.ConnectionError as e:
         logger.critical(str(e))
+        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+        exit(0)
+
+    try:
+        resp = resp.json()
+    except Exception as e:
         logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
         exit(0)
 
