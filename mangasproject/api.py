@@ -78,10 +78,13 @@ def list_chapters(series, page=1):
     for chapter in resp["chapters"]:
         m = re.search("([0-9]+)-(.*)$", chapter["link"])
 
+        s = Series(
+            id=chapter["id_serie"],
+            name=chapter["name"],
+        )
+
         c = Chapter(
             id=chapter["id_chapter"],
-            id_series=chapter["id_serie"],
-            series_name=chapter["name"],
             id_release=m.group(1),
             name=chapter["chapter_name"],
             number=chapter["number"],
@@ -89,7 +92,8 @@ def list_chapters(series, page=1):
             scanlator=chapter["scanlator"],
             partner_scans=chapter["partner_scans"],
             view_count=chapter["view_count"],
-            link=chapter["link"]
+            link=chapter["link"],
+            series=s
         )
 
         series.chapters.append(c)
@@ -214,18 +218,22 @@ def list_most_read_period(period='week', adult_content=0):
         exit(0)
 
     for chapter in resp["most_read"]:
+        s = Series(
+            id=chapter["id_serie"],
+            cover=chapter["series_image"],
+            name=chapter["series_name"],
+            link=chapter["serie_link"]
+        )
+
         c = Chapter(
             adult_content=chapter["adult_content"],
-            id_series=chapter["id_serie"],
             id_release=chapter["id_release"],
             domain=chapter["domain"],
-            series_image=chapter["series_image"],
-            series_name=chapter["series_name"],
             number=chapter["chapter_number"],
             scanlator=chapter["scanlator"],
             date=chapter["date"],
-            series_link=chapter["serie_link"],
-            link=chapter["link"]
+            link=chapter["link"],
+            series=s
         )
 
         results.append(c)

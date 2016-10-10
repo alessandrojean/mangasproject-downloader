@@ -3,7 +3,7 @@ from mangasproject.logger import logger
 
 
 class Series(object):
-    def __init__(self, id, name=None, label=None, score=None, value=None, author=None, artist=None, categories=[],
+    def __init__(self, id=None, name=None, label=None, score=None, value=None, author=None, artist=None, categories=[],
                  cover=None, link=None, is_complete=False, chapters=[], view_count=None):
         self.id = id
         self.name = name
@@ -55,14 +55,12 @@ class Category(object):
 
 
 class Chapter(object):
-    def __init__(self, id=None, id_series=None, id_release=None, series_name=None, name=None, number=None, date=None,
+    def __init__(self, id=None, id_release=None, name=None, number=None, date=None,
                  scanlator=None, partner_scans=None, view_count=None, link=None, pages=[], adult_content=False,
-                 domain=None, series_image=None, series_link=None):
+                 domain=None, series=Series()):
         self.id = id
-        self.id_series = id_series
         self.id_release = id_release
-        self.series_name = series_name
-        self.name = name
+        self.name=name
         self.number = number
         self.date = date
         self.scanlator = scanlator
@@ -72,16 +70,15 @@ class Chapter(object):
         self.pages = pages
         self.adult_content = adult_content
         self.domain = domain
-        self.series_image = series_image
-        self.series_link = series_link
+        self.series = series
 
     def __repr__(self):
-        return "<Chapter: {0}-{1}>".format(self.number, self.name)
+        return "<Chapter: {0}-{1}>".format(self.number, self.series.name)
 
     def show(self):
         table = [
             ["Id", self.id],
-            ["Series", self.series_name],
+            ["Series", self.series.name],
             ["Name", self.name],
             ["Number", self.number],
             ["Date", self.date],

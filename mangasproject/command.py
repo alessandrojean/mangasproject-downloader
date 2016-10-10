@@ -12,7 +12,6 @@ def main():
     banner()
     options = cmd_parser()
 
-    chapter_ids = options.ids
     chapter_list = []
 
     if options.search:
@@ -31,14 +30,24 @@ def main():
         results = list_most_read_period(options.period, options.adult_content)
         print_most_read_period(results)
 
-    if options.chapters:
-        series = Series(options.id)
+    if options.list_chapters:
+        series = Series(id=options.id)
         list_chapters(series, page=options.page)
         print_chapters(series.chapters)
 
-    if chapter_ids:
-        for id in chapter_ids:
-            chapter_list.append(Chapter(id=None, id_release=id,))
+    if options.chapters:
+        series = Series(id=options.id)
+        list_chapters(series, page=options.page)
+
+        for number in options.chapters:
+            for chapter in series.chapters:
+                if str(chapter.number) == str(number):
+                    chapter_list.append(chapter)
+
+        if len(chapter_list) > 0:
+            print_chapters(chapter_list)
+        else:
+            logger.warn("Chapter(s) not found, check another page with the argument --page x")
 
     if options.is_download:
         downloader = Downloader(timeout=options.timeout)

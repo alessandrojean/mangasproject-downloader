@@ -21,9 +21,9 @@ def cmd_parser():
     parser = OptionParser()
     parser.add_option("--search", type="string", dest="search", action="store", help="query searched")
     parser.add_option('--page', type='int', dest='page', action='store', default=1, help='page number of list')
-    parser.add_option('--id', type='int', dest='id', action='store', help='series/chapter id of mangásPROJECT')
-    parser.add_option('--ids', type='str', dest='ids', action='store', help='chapter id set, e.g. 123,987,456')
-    parser.add_option('--chapters', dest='chapters', default=False, action='store_true',
+    parser.add_option('--id', type='int', dest='id', action='store', help='series id of mangásPROJECT')
+    parser.add_option('--chapters', type='str', dest='chapters', action='store', help='chapter numbers set, e.g. 123,987,456')
+    parser.add_option('--list-chapters', dest='list_chapters', default=False, action='store_true',
                       help='list chapters of the series')
     parser.add_option('--releases', dest='releases', default=False, action='store_true', help='show last releases')
     parser.add_option('--most-read', dest='most_read', default=False, action='store_true', help='show most read series')
@@ -39,19 +39,16 @@ def cmd_parser():
 
     (options, args) = parser.parse_args()
 
-    if options.ids:
-        args = map(lambda id: id.strip(), options.ids.split(','))
-        options.ids = set(map(int, filter(lambda id: id.isdigit(), args)))
+    if options.chapters:
+        args = map(lambda chapters: chapters.strip(), options.chapters.split(','))
+        options.chapters = set(map(int, filter(lambda chapters: chapters.isdigit(), args)))
 
-    if options.is_download and not options.id and not options.ids:
-        logger.critical('Chapter id/ids is required for downloading')
+    if options.is_download and not options.id and not options.chapters:
+        logger.critical('Chapter(s) number(s) is(are) required for downloading')
         parser.print_help()
         exit(0)
 
-    if options.id:
-        options.ids = (options.id,) if not options.ids else options.ids
-
-    if options.chapters and not options.id:
+    if options.list_chapters and not options.id:
         logger.critical('Series id is required for list chapters')
         parser.print_help()
         exit(0)
@@ -73,7 +70,7 @@ def print_chapters(chapters_list):
     if not chapters_list:
         return
     chapters_list = [
-        [i.id_release, i.number, i.name if i.name else '{0} #{1}'.format(i.series_name, i.number), i.scanlator, i.date]
+        [i.id_release, i.number, i.name if i.name else '{0} #{1}'.format(i.series.name, i.number), i.scanlator, i.date]
         for i in chapters_list]
     headers = ["id", "number", "name", "scanlator", "date"]
     logger.info(u"List of chapters\n{0}".format(tabulate(
@@ -109,7 +106,7 @@ def print_most_read_period(most_read_period_list):
     if not most_read_period_list:
         return
     most_read_period_list = [
-        [i.id_release, "{0} #{1}".format(i.series_name, i.number), i.scanlator, i.date]
+        [i.id_release, "{0} #{1}".format(i.series.name, i.number), i.scanlator, i.date]
         for i in most_read_period_list
     ]
     headers = ["id", "chapter", "scanlator", "date"]

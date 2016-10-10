@@ -11,18 +11,19 @@ Simple downloader of mangásPROJECT website.
 ## How to use
 Search
     
-    mangasproject --search="one piece"
+    mangasproject --search "one piece"
 List chapters of a series by id
 
-    mangasproject --id=13 --chapters [--page=2]
-Download chapters by id
+    mangasproject --id 13 --list-chapters [--page 2]
+Download chapters by number
 
-    mangasproject --ids=12345,67890 --download
+    mangasproject --id 13 --chapters "831,832,833" [--page 2] --download
 
+Another examples will be added soon to wiki.
 ## Observations
 
-+ All the chapters will be downloaded in the */export* folder.
-+ Unfortunately, the mangásPROJECT API doesn't provide an search by id, so now the downloaded chapters file name is *&lt;release_id&gt;.zip*
++ All the chapters will be downloaded in the */export* folder;
++ The filename of the chapters will be *'[&lt;scanlator&gt;] &lt;series_name&gt; &lt;chapter_number&gt;.zip'*
 
 ## License
 
@@ -41,4 +42,4 @@ Download chapters by id
     limitations under the License.
 ## Disclaimer
 
-The developer of this library don't have anny filiation with the involved sites.
+The developer of this library don't have anny filiation with the involved site.

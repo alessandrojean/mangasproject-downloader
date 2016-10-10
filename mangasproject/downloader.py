@@ -43,15 +43,24 @@ class Downloader(Singleton):
                 return None
         return url
 
-    def _zipdir(self, id_release):
-        logger.info("Creating {0}.zip".format(id_release))
-        zipf = zipfile.ZipFile("export/{0}.zip".format(id_release), "w", zipfile.ZIP_DEFLATED)
-        for root, dirs, files in os.walk("export/{0}/".format(id_release)):
+    def _rem_ilegal_characters(self, text):
+        return "".join(x for x in text if (x.isalnum() or x in "._- "))
+
+    def _zipdir(self, chapter):
+        chapter.scanlator = self._rem_ilegal_characters(chapter.scanlator)
+        chapter.series.name = self._rem_ilegal_characters(chapter.series.name)
+
+        filename = "[{0}] {1} {2}.zip".format(
+            chapter.scanlator, chapter.series.name, chapter.number
+        )
+        logger.info("Creating \'{}\'".format(filename))
+        zipf = zipfile.ZipFile("export/{}".format(filename), "w", zipfile.ZIP_DEFLATED)
+        for root, dirs, files in os.walk("export/{}/".format(chapter.id_release)):
             for file in files:
                 zipf.write(os.path.join(root, file))
                 os.remove(os.path.join(root, file))
-        logger.info("Deleting folder \'{0}\'".format(id_release))
-        os.rmdir("export/{0}".format(id_release))
+        logger.info("Deleting folder \'{0}\'".format(chapter.id_release))
+        os.rmdir("export/{0}".format(chapter.id_release))
         zipf.close()
 
     def download(self, chapter):
@@ -72,4 +81,4 @@ class Downloader(Singleton):
         for url in chapter.pages:
             self._download(url, folder=folder)
 
-        self._zipdir(chapter.id_release)
+        self._zipdir(chapter)
