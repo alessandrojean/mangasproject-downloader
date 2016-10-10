@@ -22,13 +22,14 @@ def cmd_parser():
     parser.add_option("--search", type="string", dest="search", action="store", help="query searched")
     parser.add_option('--page', type='int', dest='page', action='store', default=1, help='page number of list')
     parser.add_option('--id', type='int', dest='id', action='store', help=u'series id of mangásPROJECT')
-    parser.add_option('--chapters', type='str', dest='chapters', action='store', help='chapter numbers set, e.g. 123,987,456')
+    parser.add_option('--chapters', type='str', dest='chapters', action='store',
+                      help='chapter numbers set, e.g. 123,987,456')
     parser.add_option('--list-chapters', dest='list_chapters', default=False, action='store_true',
                       help='list chapters of the series')
     parser.add_option('--releases', dest='releases', default=False, action='store_true', help='show last releases')
     parser.add_option('--most-read', dest='most_read', default=False, action='store_true', help='show most read series')
     parser.add_option('--most-read-period', dest='most_read_period', default=False, action='store_true',
-                      help='show most read by period series')
+                      help='show most read by period chapters')
     parser.add_option('--period', type='string', dest='period', action='store', default='week',
                       help='period of most read')
     parser.add_option('--adult-content', type='int', dest='adult_content', action='store',
