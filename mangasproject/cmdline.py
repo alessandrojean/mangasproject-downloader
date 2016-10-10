@@ -41,8 +41,7 @@ def cmd_parser():
     (options, args) = parser.parse_args()
 
     if options.chapters:
-        args = map(lambda chapters: chapters.strip(), options.chapters.split(','))
-        options.chapters = set(map(int, filter(lambda chapters: chapters.isdigit(), args)))
+        options.chapters = hyphen_range(options.chapters)
 
     if options.is_download and not options.id and not options.chapters:
         logger.critical('Chapter(s) number(s) is(are) required for downloading')
@@ -55,6 +54,19 @@ def cmd_parser():
         exit(0)
 
     return options
+
+
+def hyphen_range(x):
+    result = []
+    for part in x.split(','):
+        if '-' in part:
+            a, b = part.split('-')
+            a, b = int(a), int(b)
+            result.extend(range(a, b + 1))
+        else:
+            a = int(part)
+            result.append(a)
+    return result
 
 
 def print_series(series_list):
