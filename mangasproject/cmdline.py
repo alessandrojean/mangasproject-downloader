@@ -21,7 +21,7 @@ def cmd_parser():
     parser = OptionParser()
     parser.add_option("--search", type="string", dest="search", action="store", help="query searched")
     parser.add_option('--page', type='int', dest='page', action='store', default=1, help='page number of list')
-    parser.add_option('--id', type='int', dest='id', action='store', help='series id of mangásPROJECT')
+    parser.add_option('--id', type='int', dest='id', action='store', help=u'series id of mangásPROJECT')
     parser.add_option('--chapters', type='str', dest='chapters', action='store', help='chapter numbers set, e.g. 123,987,456')
     parser.add_option('--list-chapters', dest='list_chapters', default=False, action='store_true',
                       help='list chapters of the series')
