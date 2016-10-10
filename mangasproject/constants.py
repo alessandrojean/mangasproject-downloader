@@ -10,3 +10,6 @@ SCANLATORS_URL = "%s/scanlators/scanlators_list.json" % URL
 CATEGORIES_URL = "%s/categories/categories_list.json" % URL
 CATEGORIES_SERIES_URL = "%s/categories/categories_series_list.json" % URL
 SERIES_URL = "%s/series/series_list.json?page=" % URL
+RELEASES_URL = "%s/home/releases.json?page=" % URL
+MOST_READ_URL = "%s/home/most_read.json?page=" % URL
+MOST_READ_PERIOD_URL = "%s/home/most_read_period.json" % URL

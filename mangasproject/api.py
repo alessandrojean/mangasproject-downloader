@@ -3,8 +3,8 @@ import requests
 import re
 
 from mangasproject.logger import logger
-from mangasproject.constants import SEARCH_URL, CHAPTERS_LIST_URL, PAGES_LIST_URL, USER_AGENT
-from mangasproject.series import Series, Category, Chapter
+from mangasproject.constants import *
+from mangasproject.model import *
 from mangasproject.cmdline import print_chapters
 
 
@@ -18,15 +18,13 @@ def request(method, url, **kwargs):
 
 def search(query):
     results = []
-
     logger.info(u"Searching for {0}".format(query))
 
     data = {"search": query}
     try:
         resp = request('post', SEARCH_URL, json=data)
     except requests.ConnectionError as e:
-        logger.critical(str(e))
-        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+        logger.error(str(e))
         exit(0)
 
     try:
@@ -68,8 +66,7 @@ def list_chapters(series, page=1):
     try:
         resp = request('post', url, json=data)
     except requests.ConnectionError as e:
-        logger.critical(str(e))
-        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+        logger.error(str(e))
         exit(0)
 
     try:
@@ -105,8 +102,7 @@ def list_pages(chapter):
     try:
         resp = request('post', PAGES_LIST_URL, json=data)
     except requests.ConnectionError as e:
-        logger.critical(str(e))
-        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+        logger.error(str(e))
         exit(0)
 
     try:
@@ -116,6 +112,125 @@ def list_pages(chapter):
         exit(0)
 
     chapter.pages = resp["images"]
+
+
+def list_releases(page=1):
+    results = []
+    logger.info(u"Fetching releases")
+
+    url = "{0}{1}".format(RELEASES_URL, page)
+    try:
+        resp = request('get', url)
+    except requests.ConnectionError as e:
+        logger.error(str(e))
+        exit(0)
+
+    try:
+        resp = resp.json()
+    except Exception as e:
+        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+        exit(0)
+
+    for release in resp["releases"]:
+        s = Series(
+            id=release["id_serie"],
+            name=release["name"],
+            cover=release["image"],
+            link="{0}{1}".format(URL, release["link"])
+        )
+
+        ch = []
+        for chapter in release["chapters"]:
+            m = re.search("([0-9]+)-(.*)$", chapter["url"])
+
+            c = Chapter(
+                link=chapter["url"],
+                number=chapter["number"],
+                id_release=m.group(1)
+            )
+            ch.append(c)
+
+        r = Release(
+            date=release["date"],
+            date_created=release["date_created"],
+            series=s,
+            range=release["range"],
+            chapters=ch
+        )
+
+        results.append(r)
+
+    return results
+
+
+def list_most_read(page=1):
+    results = []
+    logger.info(u"Fetching most read list")
+
+    url = "{0}{1}".format(MOST_READ_URL, page)
+    try:
+        resp = request('get', url)
+    except requests.ConnectionError as e:
+        logger.error(str(e))
+        exit(0)
+
+    try:
+        resp = resp.json()
+    except Exception as e:
+        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+        exit(0)
+
+    for series in resp["most_read"]:
+        s = Series(
+            id=series["id_serie"],
+            name=series["serie_name"],
+            cover=series["cover"],
+            link="{0}{1}".format(URL, series["link"]),
+            view_count=series["view_count"]
+        )
+
+        results.append(s)
+
+    return results
+
+
+def list_most_read_period(period='week', adult_content=0):
+    results = []
+    logger.info(u"Fetching most read by {} list".format(period))
+    if adult_content > 0:
+        logger.info("Showing {}adult content".format("only " if adult_content == 2 else ""))
+
+    data = {"period": period, "adult_content": adult_content}
+    try:
+        resp = request('post', MOST_READ_PERIOD_URL, json=data)
+    except requests.ConnectionError as e:
+        logger.error(str(e))
+        exit(0)
+
+    try:
+        resp = resp.json()
+    except Exception as e:
+        logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
+        exit(0)
+
+    for chapter in resp["most_read"]:
+        c = Chapter(
+            adult_content=chapter["adult_content"],
+            id_series=chapter["id_serie"],
+            id_release=chapter["id_release"],
+            domain=chapter["domain"],
+            series_image=chapter["series_image"],
+            series_name=chapter["series_name"],
+            number=chapter["chapter_number"],
+            scanlator=chapter["scanlator"],
+            date=chapter["date"],
+            series_link=chapter["serie_link"],
+            link=chapter["link"]
+        )
+
+        results.append(c)
+
+    return results
 
 
 if __name__ == "__main__":
