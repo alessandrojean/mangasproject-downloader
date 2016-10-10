@@ -19,7 +19,7 @@ Download chapters by number
 
     mangasproject --id 13 --chapters "831,832,833" [--page 2] --download
 
-Another examples will be added soon to wiki.
+All examples can be found at [Commands](https://github.com/alessandrojean/mangasproject-downloader/wiki/Commands) page.
 ## Observations
 
 + All the chapters will be downloaded in the */export* folder;
