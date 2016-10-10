@@ -22,8 +22,8 @@ Download chapters by number
 All examples can be found at [Commands](https://github.com/alessandrojean/mangasproject-downloader/wiki/Commands) page.
 ## Observations
 
-+ All the chapters will be downloaded in the */export* folder;
-+ The filename of the chapters will be *'[&lt;scanlator&gt;] &lt;series_name&gt; &lt;chapter_number&gt;.zip'*
++ All the chapters will be downloaded in the `/export` folder;
++ The filename of the chapters will be `[<scanlator>] <series_name> <chapter_number>.zip`
 
 ## License
 
