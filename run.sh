@@ -1,2 +1,2 @@
-echo -n "\033]0;mangásPROJECT Downloader\007"
-python -m mangasproject
+echo -ne "\033]0;${USER}@{HOSTNAME}: mangásPROJECT Downloader\007"
+python -m mangasproject "$@"
