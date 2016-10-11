@@ -8,11 +8,11 @@ from mangasproject.model import *
 from mangasproject.cmdline import print_chapters
 
 
-def request(method, url, referer=URL, **kwargs):
+def request(method, url, referer=URL, user_agent=USER_AGENT, **kwargs):
     if not hasattr(requests, method):
         raise AttributeError('\'requests\' object has no attribute \'{0}\''.format(method))
 
-    headers = {"X-Requested-With": "XMLHttpRequest", "User-Agent": USER_AGENT, "Referer": referer}
+    headers = {"X-Requested-With": "XMLHttpRequest", "User-Agent": user_agent, "Referer": referer}
     return requests.__dict__[method](url, headers=headers, **kwargs)
 
 
@@ -99,12 +99,14 @@ def list_chapters(series, page=1):
         series.chapters.append(c)
 
 
-def list_pages(chapter):
+def list_pages(chapter, webp=True):
     logger.info(u"Fetching pages of {0}".format(chapter.id_release))
 
     data = {"id_release": chapter.id_release}
+    user_agent = USER_AGENT if webp else USER_AGENT_OLD
+
     try:
-        resp = request('post', PAGES_LIST_URL, referer=chapter.link, json=data)
+        resp = request('post', PAGES_LIST_URL, referer=chapter.link, user_agent=user_agent, json=data)
     except requests.ConnectionError as e:
         logger.error(str(e))
         exit(0)

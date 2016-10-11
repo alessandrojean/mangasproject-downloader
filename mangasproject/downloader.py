@@ -14,8 +14,9 @@ from mangasproject.cmdline import print_progress
 
 
 class Downloader(Singleton):
-    def __init__(self, timeout=30):
+    def __init__(self, timeout=30, webp=True):
         self.timeout = timeout
+        self.webp = webp
 
     def _download(self, url, folder='', filename='', retried=False):
         #logger.info("Start downloading: {0} ...".format(url))
@@ -65,7 +66,7 @@ class Downloader(Singleton):
         zipf.close()
 
     def download(self, chapter):
-        list_pages(chapter)
+        list_pages(chapter, webp=self.webp)
 
         folder = 'export/{0}'.format(str(chapter.id_release))
 

@@ -50,7 +50,9 @@ def main():
             logger.warn("Chapter(s) not found, check another page with the argument --page x")
 
     if options.is_download:
-        downloader = Downloader(timeout=options.timeout)
+        if not options.webp:
+            logger.info("Webp downloading disabled, turn it on if you want your chapters with smaller size.")
+        downloader = Downloader(timeout=options.timeout, webp=options.webp)
         for chapter in chapter_list:
             downloader.download(chapter)
 

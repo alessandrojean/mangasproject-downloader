@@ -33,11 +33,12 @@ def cmd_parser():
                       help='show most read by period chapters')
     parser.add_option('--period', type='string', dest='period', action='store', default='week',
                       help='period of most read')
-    parser.add_option('--adult-content', type='int', dest='adult_content', action='store',
-                      help='show adult content in most read [0, 1 or 2]')
+    parser.add_option('--adult-content', type='choice', dest='adult_content', action='store',
+                      choices=[0, 1, 2], help='show adult content in most read [0, 1 or 2]')
     parser.add_option('--download', dest='is_download', action='store_true', help='download chapters or not')
     parser.add_option('--timeout', type='int', dest='timeout', action='store', default=30,
                       help='timeout of download chapter')
+    parser.add_option('--disable-webp', dest='webp', action='store_false', default=True, help='download pages as webp')
 
     (options, args) = parser.parse_args()
 
