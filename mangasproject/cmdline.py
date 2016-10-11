@@ -19,7 +19,7 @@ def banner():
 
 
 def cmd_parser():
-    parser = OptionParser()
+    parser = OptionParser(usage="Usage: mangasproject [options]")
     parser.add_option("--search", type="string", dest="search", action="store", help="query searched")
     parser.add_option('--page', type='int', dest='page', action='store', default=1, help='page number of list')
     parser.add_option('--id', type='int', dest='id', action='store', help=u'series id of mangásPROJECT')
@@ -38,7 +38,8 @@ def cmd_parser():
     parser.add_option('--download', dest='is_download', action='store_true', help='download chapters or not')
     parser.add_option('--timeout', type='int', dest='timeout', action='store', default=30,
                       help='timeout of download chapter')
-    parser.add_option('--disable-webp', dest='webp', action='store_false', default=True, help='download pages as webp')
+    parser.add_option('--disable-webp', dest='webp', action='store_false', default=True,
+                      help='disable download pages as webp')
 
     (options, args) = parser.parse_args()
 
