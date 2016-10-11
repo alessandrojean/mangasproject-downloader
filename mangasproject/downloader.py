@@ -10,6 +10,7 @@ import requests
 from mangasproject.utils import Singleton
 from mangasproject.logger import logger
 from mangasproject.api import request, list_pages
+from mangasproject.cmdline import print_progress
 
 
 class Downloader(Singleton):
@@ -17,7 +18,7 @@ class Downloader(Singleton):
         self.timeout = timeout
 
     def _download(self, url, folder='', filename='', retried=False):
-        logger.info("Start downloading: {0} ...".format(url))
+        #logger.info("Start downloading: {0} ...".format(url))
         filename = filename if filename else os.path.basename(urlparse(url).path)
         base_filename, extension = os.path.splitext(filename)
         try:
@@ -78,7 +79,12 @@ class Downloader(Singleton):
         else:
             logger.warn("Path \'{0}\' already exist.".format(folder))
 
+        i = 0
+        t = len(chapter.pages)
+        print_progress(i, t, prefix='Progress:', suffix='Complete', bar_length=50)
         for url in chapter.pages:
             self._download(url, folder=folder)
+            i += 1
+            print_progress(i, t, prefix='Progress:', suffix='Complete', bar_length=50)
 
         self._zipdir(chapter)
