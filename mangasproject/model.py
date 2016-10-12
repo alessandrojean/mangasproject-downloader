@@ -4,7 +4,8 @@ from mangasproject.logger import logger
 
 class Series(object):
     def __init__(self, id=None, name=None, label=None, score=None, value=None, author=None, artist=None, categories=[],
-                 cover=None, link=None, is_complete=False, chapters=[], view_count=None):
+                 cover=None, link=None, is_complete=False, chapters=[], view_count=None, chapters_count=None,
+                 description=None, favorite_count=None, menu_tag=[], date_last_release=None, releases_count=None):
         self.id = id
         self.name = name
         self.label = label
@@ -18,6 +19,12 @@ class Series(object):
         self.is_complete = is_complete
         self.chapters = chapters
         self.view_count = view_count
+        self.chapters_count = chapters_count
+        self.description = description
+        self.favorite_count = favorite_count
+        self.menu_tag = menu_tag
+        self.date_last_release = date_last_release
+        self.releases_count = releases_count
 
     def __repr__(self):
         return "<Series: {0}>".format(self.name)
@@ -35,11 +42,14 @@ class Series(object):
 
 
 class Category(object):
-    def __init__(self, id, id_sub_domain=None, domain=None, name=None):
+    def __init__(self, id, id_sub_domain=None, domain=None, name=None, link=None, titles=None, view_count=None):
         self.id = id
         self.id_sub_domain = id_sub_domain
         self.domain = domain
         self.name = name
+        self.link = link
+        self.titles = titles
+        self.view_count = view_count
 
     def __repr__(self):
         return "<Category: {0}>".format(self.name)
@@ -108,6 +118,30 @@ class Release(object):
             ["Range", self.range]
         ]
         logger.info(u"Print release information\n{}".format(tabulate(table)))
+
+
+class Scanlator(object):
+    def __init__(self, id=None, name=None, facebook_url=None, image=None, titles=None, view_count=None,
+                 categories=[], link=None):
+        self.id = id
+        self.name = name
+        self.facebook_url = facebook_url
+        self.image = image
+        self.titles = titles
+        self.view_count = view_count
+        self.categories = categories
+        self.link = link
+
+    def __repr__(self):
+        return "<Scanlator: {}>".format(self.name)
+
+    def show(self):
+        table = [
+            ["Id", self.id],
+            ["Name", self.name],
+            ["Titles", self.titles],
+            ["View Count", self.view_count]
+        ]
 
 
 if __name__ == "__main__":

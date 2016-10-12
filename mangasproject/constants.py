@@ -8,9 +8,30 @@ SEARCH_URL = "%s/lib/search/series.json" % URL
 CHAPTERS_LIST_URL = "%s/series/chapters_list.json?page=" % URL
 PAGES_LIST_URL = "%s/leitor/pages.json" % URL
 SCANLATORS_URL = "%s/scanlators/scanlators_list.json" % URL
+SCANLATORS_SERIES_URL = "%s/scanlators/series_list.json?page=" % URL
 CATEGORIES_URL = "%s/categories/categories_list.json" % URL
-CATEGORIES_SERIES_URL = "%s/categories/categories_series_list.json" % URL
+CATEGORIES_SERIES_URL = "%s/categories/series_list.json?page=" % URL
 SERIES_URL = "%s/series/series_list.json?page=" % URL
 RELEASES_URL = "%s/home/releases.json?page=" % URL
 MOST_READ_URL = "%s/home/most_read.json?page=" % URL
 MOST_READ_PERIOD_URL = "%s/home/most_read_period.json" % URL
+
+CHOICES = [
+    'all',
+    'best_scores',
+    'most_read',
+    'recently_updated',
+    'chapters_number',
+    'recently_completed',
+    'favorites'
+]
+
+CHOICES_NAME = [
+    'All (A-Z)',
+    'Best scores',
+    'Most read',
+    'Recently updated',
+    'Chapters number',
+    'Recently completed',
+    'Favorites'
+]

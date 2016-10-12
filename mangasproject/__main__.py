@@ -14,6 +14,26 @@ def main():
 
     chapter_list = []
 
+    if options.list_series:
+        if options.category_id is not None:
+            results = list_categories_series(Category(id=options.category_id), options.page)
+            print_series_list(results, option='category')
+        elif options.scanlator_id is not None:
+            results = list_scanlators_series(Scanlator(id=options.scanlator_id), options.page)
+            print_series_list(results, option='scanlator')
+        else:
+            results = list_series(sort_by=CHOICES.index(options.sort_by), initial=options.initial,
+                                  period=options.period, page=options.page)
+            print_series_list(results, option=options.sort_by)
+
+    if options.list_categories:
+        results = list_categories()
+        print_categories(results)
+
+    if options.list_scanlators:
+        results = list_scanlators()
+        print_scanlators(results)
+
     if options.search:
         results = search(options.search)
         print_series(results)
