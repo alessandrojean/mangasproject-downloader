@@ -25,6 +25,10 @@ All examples can be found at [Commands](https://github.com/alessandrojean/mangas
 + All the chapters will be downloaded in the `/export` folder;
 + The filename of the chapters will be `[<scanlator>] <series_name> <chapter_number>.zip`
 
+## Requirements
++ **(tabulate)[https://pypi.python.org/pypi/tabulate]** *v0.7.5+*
++ **(requests)[https://pypi.python.org/pypi/requests/]** *v2.9.1+*
+
 ## License
 
     Copyright 2016 Alessandro Jean
