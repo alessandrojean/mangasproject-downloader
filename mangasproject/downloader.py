@@ -82,10 +82,10 @@ class Downloader(Singleton):
 
         i = 0
         t = len(chapter.pages)
-        print_progress(i, t, prefix='Progress:', suffix='Complete', bar_length=50)
+        print_progress(i, t, prefix='[PROGRESS]', suffix='Complete', bar_length=50)
         for url in chapter.pages:
             self._download(url, folder=folder)
             i += 1
-            print_progress(i, t, prefix='Progress:', suffix='Complete', bar_length=50)
+            print_progress(i, t, prefix='[PROGRESS]', suffix='Complete', bar_length=50)
 
         self._zipdir(chapter)
