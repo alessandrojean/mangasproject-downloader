@@ -11,6 +11,7 @@ from mangasproject.utils import Singleton
 from mangasproject.logger import logger
 from mangasproject.api import request, list_pages
 from mangasproject.cmdline import print_progress
+from mangasproject.constants import URL
 
 
 class Downloader(Singleton):
@@ -18,8 +19,8 @@ class Downloader(Singleton):
         self.timeout = timeout
         self.webp = webp
 
-    def _download(self, url, folder='', filename='', retried=False):
-        #logger.info("Start downloading: {0} ...".format(url))
+    def _download(self, url, folder='', filename='', retried=False, iteration=0, total=0):
+        url = URL + url if url.startswith('/') else url
         filename = filename if filename else os.path.basename(urlparse(url).path)
         base_filename, extension = os.path.splitext(filename)
         try:
@@ -29,8 +30,11 @@ class Downloader(Singleton):
                 if length is None:
                     f.write(response.content)
                 else:
+                    dl = 0
                     for chunk in response.iter_content(2048):
+                        dl += len(chunk)
                         f.write(chunk)
+                        print_progress(iteration, total, file_iteration=dl, file_total=int(length), prefix='[PROGRESS]', suffix='Complete', bar_length=50)
         except requests.HTTPError as e:
             if not retried:
                 logger.error("Error: {0}, retrying".format(str(e)))
@@ -84,7 +88,7 @@ class Downloader(Singleton):
         t = len(chapter.pages)
         print_progress(i, t, prefix='[PROGRESS]', suffix='Complete', bar_length=50)
         for url in chapter.pages:
-            self._download(url, folder=folder)
+            self._download(url, folder=folder, iteration=i, total=t)
             i += 1
             print_progress(i, t, prefix='[PROGRESS]', suffix='Complete', bar_length=50)
 

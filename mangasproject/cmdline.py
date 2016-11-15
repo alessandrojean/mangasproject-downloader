@@ -220,7 +220,7 @@ def print_most_read_period(most_read_period_list):
 
 
 # Print iterations progress
-def print_progress(iteration, total, prefix='', suffix='', decimals=1, bar_length=100):
+def print_progress(iteration, total, file_iteration=0, file_total=0, prefix='', suffix='', decimals=1, bar_length=100):
     """
     Call in a loop to create terminal progress bar
     @params:
@@ -232,9 +232,11 @@ def print_progress(iteration, total, prefix='', suffix='', decimals=1, bar_lengt
         bar_length  - Optional  : character length of bar (Int)
     """
     format_str = "{0:." + str(decimals) + "f}"
-    percents = format_str.format(100 * (iteration / float(total)))
-    filled_lenght = int(round(bar_length * iteration / float(total)))
-    bar = '█' * filled_lenght + '-' * (bar_length - filled_lenght)
+    percent_file = ((100 * (file_iteration / float(file_total)))/total) if file_iteration and file_total else 0
+    percent_number = (100 * (iteration / float(total))) + percent_file
+    percents = format_str.format(percent_number)
+    filled_length = int(round((percent_number * bar_length)/100))
+    bar = '█' * filled_length + '-' * (bar_length - filled_length)
     sys.stdout.write('\r%s |%s| %s%s %s' % (prefix, bar, percents, '%', suffix)),
     if iteration == total:
         sys.stdout.write('\n')

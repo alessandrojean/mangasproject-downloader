@@ -118,6 +118,10 @@ def list_pages(chapter, webp=True):
         logger.warn("mangásPROJECT only works in Brazil, use a VPN.")
         exit(0)
 
+    for url in resp["images"]:
+        if url.startswith('/'):
+            resp["images"].remove(url)
+
     chapter.pages = resp["images"]
 
 
