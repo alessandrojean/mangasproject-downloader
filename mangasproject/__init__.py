@@ -10,7 +10,7 @@ Program to view info and download from mangásPROJECT website.
 """
 
 __title__ = 'mangasproject-downloader'
-__version__ = '1.2.0'
+__version__ = '1.2.3'
 __author__ = 'Alessandro Jean'
 __licence__ = 'Apache Licence 2.0'
 __copyright__ = 'Copyright 2016 Alessandro Jean'
